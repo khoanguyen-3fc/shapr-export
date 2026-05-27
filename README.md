@@ -4,6 +4,12 @@ A small desktop utility (PySide6 + sqlite3) to browse local Shapr3D projects and
 
 ![Shapr3D Export Tool](images/shapr-export.jpg)
 
+## Disclaimer
+
+This project is intended for educational and research use, and is provided "as is," without any warranty.
+
+By using this project, you acknowledge that you are doing so at your own risk and that you are responsible for ensuring that your use of this project complies with all applicable laws, regulations, and terms of service.
+
 ## Features
 
 - Project browser grid with thumbnail + project name
