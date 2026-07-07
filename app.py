@@ -336,18 +336,24 @@ class ProjectBrowser(QMainWindow):
         self.last_export_dir = Path(selected_path).parent
         self.settings.setValue("last_export_dir", str(self.last_export_dir))
 
-        # TODO: convert the tessellation cache database to STL format
-        # For now, just copy the database file as a placeholder for the actual STL export logic
+        import tessellation_export
+
         try:
-            shutil.copy2(source, selected_path)
-        except OSError as exc:
+            result = tessellation_export.export_stl(source, Path(selected_path))
+        except tessellation_export.TessellationError as exc:
+            QMessageBox.critical(self, "Export failed", str(exc))
+            return
+        except Exception as exc:  # noqa: BLE001 - surface any conversion error
             QMessageBox.critical(
-                self, "Export failed", f"Failed to copy tessellation cache: {exc}"
+                self, "Export failed", f"Failed to convert tessellation cache:\n{exc}"
             )
             return
 
         QMessageBox.information(
-            self, "Export complete", f"Tessellation exported to:\n{selected_path}"
+            self,
+            "Export complete",
+            f"Tessellation exported to:\n{selected_path}\n\n"
+            f"{result['triangles']} triangles from {result['faces']} faces",
         )
 
     def export_parasolid(self) -> None:

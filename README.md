@@ -23,6 +23,14 @@ Parasolid is a trademark of Siemens Digital Industries Software, and Shapr3D is 
 
 The app reads your local Shapr3D project database and loads projects. You can select a project and choose to export it in different formats.
 
+Tessellation export triggers Shapr3D to (re)generate its per-project
+tessellation cache (a SQLite database of per-face triangle meshes) via a
+`shapr3d://` deep link, then converts those cached meshes into a single binary `.stl`.
+
+> The `.stl` is in millimeters (Shapr3D uses meters) with zero facet normals
+> `(0, 0, 0)`. Orientation comes from vertex winding, so the mesh is correct,
+> though a few tools that don't recompute normals may shade faces wrong.
+
 Parasolid export selects the final body partitions from the project's workspace
 database, recovers their names, and merges them into a single named `.x_b`
 assembly using the [`ps-parser`](https://github.com/khoanguyen-3fc/ps-parser)
