@@ -10,6 +10,8 @@ This project is intended for educational and research use, and is provided "as i
 
 By using this project, you acknowledge that you are doing so at your own risk and that you are responsible for ensuring that your use of this project complies with all applicable laws, regulations, and terms of service.
 
+Parasolid is a trademark of Siemens Digital Industries Software, and Shapr3D is a trademark of Shapr3D Zrt. This project is independent and is not affiliated with, endorsed by, or sponsored by Siemens or Shapr3D. These names are used only to identify the relevant file formats and software for interoperability purposes.
+
 ## Features
 
 - Project browser grid with thumbnail + project name
