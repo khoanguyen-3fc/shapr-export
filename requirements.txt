@@ -1,1 +1,5 @@
 PySide6==6.11.1
+
+# Parasolid reader/writer, vendored as a git submodule and installed editable.
+# Run `git submodule update --init` before installing requirements.
+-e ./vendor/ps-parser
