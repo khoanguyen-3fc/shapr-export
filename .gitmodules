@@ -1,0 +1,3 @@
+[submodule "vendor/ps-parser"]
+	path = vendor/ps-parser
+	url = git@github.com:khoanguyen-3fc/ps-parser.git
