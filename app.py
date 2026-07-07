@@ -100,7 +100,7 @@ class ProjectBrowser(QMainWindow):
         self.export_tess_button.clicked.connect(self.export_tessellation)
         button_row.addWidget(self.export_tess_button)
 
-        self.export_parasolid_button = QPushButton("Export Parasolid (WIP)")
+        self.export_parasolid_button = QPushButton("Export Parasolid")
         self.export_parasolid_button.clicked.connect(self.export_parasolid)
         button_row.addWidget(self.export_parasolid_button)
 
@@ -356,10 +356,67 @@ class ProjectBrowser(QMainWindow):
             QMessageBox.warning(self, "No selection", "Please select a project first.")
             return
 
+        if not project.slot_id:
+            QMessageBox.warning(self, "Missing slot", "Selected project has no slotID.")
+            return
+
+        source = self.projects_root / project.project_id / project.slot_id
+        workspace_db = source / "workspace"
+        if not workspace_db.exists():
+            QMessageBox.warning(
+                self, "Not found", f"Project workspace not found:\n{workspace_db}"
+            )
+            return
+
+        # Imported lazily so the app still launches if the ps-parser submodule
+        # has not been initialized (git submodule update --init).
+        try:
+            import parasolid_export
+        except ImportError as exc:
+            QMessageBox.critical(
+                self,
+                "Parasolid support unavailable",
+                "The ps-parser library could not be loaded. Run:\n\n"
+                "    git submodule update --init\n\n"
+                f"Details: {exc}",
+            )
+            return
+
+        project_file_name = self.safe_name(project.title, project.project_id)
+        default_path = str(self.last_export_dir / f"{project_file_name}.x_b")
+        selected_path, _ = QFileDialog.getSaveFileName(
+            self,
+            "Export Parasolid",
+            default_path,
+            "Parasolid Transmit Files (*.x_b);;All Files (*)",
+        )
+        if not selected_path:
+            return
+
+        destination = Path(selected_path)
+        if destination.suffix.lower() != ".x_b":
+            destination = destination.with_suffix(".x_b")
+        self.last_export_dir = destination.parent
+        self.settings.setValue("last_export_dir", str(self.last_export_dir))
+
+        try:
+            result = parasolid_export.export_workspace(workspace_db, destination)
+        except parasolid_export.ExportError as exc:
+            QMessageBox.critical(self, "Export failed", str(exc))
+            return
+        except Exception as exc:  # noqa: BLE001 - surface any parser/merge error
+            QMessageBox.critical(
+                self, "Export failed", f"Unexpected error during export:\n{exc}"
+            )
+            return
+
+        bodies = result["bodies"]
+        body_list = ", ".join(bodies) if bodies else "(none)"
         QMessageBox.information(
             self,
-            "Work in progress",
-            f"Parasolid export is not implemented yet.\n\nSelected project: {project.title}",
+            "Export complete",
+            f"Parasolid exported to:\n{destination}\n\n"
+            f"{len(bodies)} body/bodies: {body_list}",
         )
 
     @staticmethod

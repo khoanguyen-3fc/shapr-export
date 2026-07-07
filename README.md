@@ -15,11 +15,16 @@ By using this project, you acknowledge that you are doing so at your own risk an
 - Project browser grid with thumbnail + project name
 - Export project to `.shapr`
 - Export tessellation to `.stl` (experimental)
-- Export Parasolid (work in progress)
+- Export Parasolid to `.x_b`
 
 ## How It Works
 
 The app reads your local Shapr3D project database and loads projects. You can select a project and choose to export it in different formats.
+
+Parasolid export selects the final body partitions from the project's workspace
+database, recovers their names, and merges them into a single named `.x_b`
+assembly using the [`ps-parser`](https://github.com/khoanguyen-3fc/ps-parser)
+library (vendored as a git submodule — see below).
 
 ## Requirements
 
@@ -27,6 +32,20 @@ The app reads your local Shapr3D project database and loads projects. You can se
 - Shapr3D installed with local project data
 
 ## Install
+
+This project vendors [`ps-parser`](https://github.com/khoanguyen-3fc/ps-parser)
+as a git submodule under `vendor/ps-parser`. Clone with submodules, or
+initialize them if you already cloned:
+
+```bash
+git clone --recurse-submodules <repo-url>
+# or, in an existing checkout:
+git submodule update --init
+```
+
+Then create the environment and install dependencies (this installs `psparser`
+editable from the submodule, per the `-e ./vendor/ps-parser` line in
+`requirements.txt`):
 
 ```bash
 python3 -m venv venv
@@ -60,4 +79,4 @@ See [LICENSE](LICENSE) for details.
 - [ ] Disable Shapr3D Cloud Sync
 - [ ] Use theme-matched thumbnails
 - [ ] Reconstruct tessellation without opening Shapr3D
-- [ ] Export Parasolid / STEP
+- [x] Export Parasolid (`.x_b`)
