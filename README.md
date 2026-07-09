@@ -1,8 +1,8 @@
-# Shapr3D Export Tool
+# Shapr Toolbox
 
-A small desktop utility (PySide6 + sqlite3) to browse local Shapr3D projects and export data.
+A small desktop utility (PySide6 + sqlite3) to browse, manage, and export local Shapr3D projects.
 
-![Shapr3D Export Tool](images/shapr-export.jpg)
+![Shapr Toolbox](images/shapr-toolbox.jpg)
 
 ## Disclaimer
 

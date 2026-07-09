@@ -36,7 +36,7 @@ class Project:
 class ProjectBrowser(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
-        self.setWindowTitle("Shapr3D Project Export")
+        self.setWindowTitle("Shapr Toolbox")
         self.resize(980, 680)
 
         self.app_data = (
@@ -60,7 +60,7 @@ class ProjectBrowser(QMainWindow):
         )
         self.projects_root = self.app_data / "Documents" / "projects"
         self.tessellation_cache = self.app_data / "Library" / "Caches" / "Tessellation"
-        self.settings = QSettings("shapr-export", "shapr-export")
+        self.settings = QSettings("shapr-toolbox", "shapr-toolbox")
         last_dir_raw = self.settings.value("last_export_dir", str(Path.home()))
         self.last_export_dir = Path(str(last_dir_raw)).expanduser()
         if not self.last_export_dir.exists():
